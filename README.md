@@ -1,4 +1,8 @@
 <p align="center">
+  <strong>English</strong> | <a href="README.zh-CN.md">中文</a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/github/license/zhilinYu/comic-production" alt="License">
   <img src="https://img.shields.io/badge/python-3.8+-green" alt="Python">
   <img src="https://img.shields.io/badge/skill-AI%20Agent-blue" alt="Skill">
@@ -11,12 +15,12 @@
 ## Examples
 
 <p float="left" align="center">
-  <img src="examples/example_money.jpg" width="30%" alt="什么是货币">
-  <img src="examples/example_inflation.jpg" width="30%" alt="什么是通胀">
-  <img src="examples/example_kline.jpg" width="30%" alt="什么是K线">
+  <img src="examples/example_money.jpg" width="30%" alt="What is Money">
+  <img src="examples/example_inflation.jpg" width="30%" alt="What is Inflation">
+  <img src="examples/example_kline.jpg" width="30%" alt="What are Candlesticks">
 </p>
 
-<p align="center"><em>Left: 什么是货币 (What is Money) &nbsp;|&nbsp; Center: 什么是通胀 (What is Inflation) &nbsp;|&nbsp; Right: 什么是K线 (What are Candlesticks)</em></p>
+<p align="center"><em>Left: What is Money &nbsp;|&nbsp; Center: What is Inflation &nbsp;|&nbsp; Right: What are Candlesticks</em></p>
 
 ## Quick Start
 
@@ -168,15 +172,16 @@ comic-production/
 ├── scripts/
 │   └── assemble.py          # PIL-based comic assembly (249 lines)
 ├── examples/
-│   ├── example_money.jpg    # 什么是货币
-│   ├── example_inflation.jpg# 什么是通胀
-│   └── example_kline.jpg    # 什么是K线
-├── README.md
+│   ├── example_money.jpg    # What is Money
+│   ├── example_inflation.jpg# What is Inflation
+│   └── example_kline.jpg    # What are Candlesticks
+├── README.md                # English documentation
+├── README.zh-CN.md          # 中文文档
 ├── LICENSE                  # MIT
 └── .gitignore
 ```
 
-## Storytelling Principles (混知写作五原则)
+## Storytelling Principles
 
 The key to great educational comics is **storytelling**, not textbook definitions:
 
