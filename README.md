@@ -1,85 +1,103 @@
+<p align="center">
+  <img src="https://img.shields.io/github/license/zhilinYu/comic-production" alt="License">
+  <img src="https://img.shields.io/badge/python-3.8+-green" alt="Python">
+  <img src="https://img.shields.io/badge/skill-AI%20Agent-blue" alt="Skill">
+</p>
+
 # Comic Production Pipeline
 
-Generate educational comic strips in the style of **Hunzhi Comics (混知漫画)** using AI image generation + PIL assembly. Produces long-form vertical comics with illustrated panels and storytelling text bands.
+> Generate educational comic strips in the style of **Hunzhi Comics (混知漫画)** — AI image generation + PIL assembly, producing long-form vertical comics with storytelling text bands.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.8+-green.svg)
+## Examples
 
-## What It Does
+<p float="left" align="center">
+  <img src="examples/example_money.jpg" width="30%" alt="什么是货币">
+  <img src="examples/example_inflation.jpg" width="30%" alt="什么是通胀">
+  <img src="examples/example_kline.jpg" width="30%" alt="什么是K线">
+</p>
 
-This tool implements a 4-step pipeline for creating Chinese educational comics (科普漫画):
+<p align="center"><em>Left: 什么是货币 (What is Money) &nbsp;|&nbsp; Center: 什么是通胀 (What is Inflation) &nbsp;|&nbsp; Right: 什么是K线 (What are Candlesticks)</em></p>
+
+## Quick Start
+
+```bash
+# Install as AI Agent Skill (Claude Code / QoderWork / Cursor)
+cp -r . ~/.qoderwork/skills/comic-production   # QoderWork
+cp -r . .claude/skills/comic-production         # Claude Code (project-level)
+
+# Or install the Python dependency only
+pip install Pillow
+```
+
+Then ask your AI agent:
+
+> "帮我做一个关于通货膨胀的科普漫画"
+
+## What is This?
+
+This project is both a **standalone Python tool** and an **AI Agent Skill** for creating Chinese educational comics (科普漫画). It implements a 4-step pipeline:
 
 ```
 1. Plan panels  →  2. Generate images (AI)  →  3. Assemble comic (PIL)  →  4. (Optional) Make video
 ```
 
-Each panel is generated independently by an AI image generator, then assembled into a polished long-form vertical comic using the included Python script.
+Each panel is generated independently by an AI image generator (DALL-E, Midjourney, etc.), then assembled into a polished long-form vertical comic using the included PIL script. The output is optimized for mobile sharing (WeChat, social media).
 
-## Features
+**Key features:**
 
-- **Hunzhi-style storytelling** — Each panel uses 3-line story text (scene → conflict → punchline)
-- **Auto watermark removal** — Strips AI-generated watermarks from panel images
-- **Dynamic text bands** — Text band height auto-adjusts based on content length
-- **Mobile-friendly output** — 1080px wide, optimized for WeChat/social sharing
-- **No image cropping** — Full panel images with text on separate bands below
-
-## Layout
-
-```
-┌─────────────────────────────┐
-│        Title Area           │
-├─────────────────────────────┤
-│                             │
-│     Panel 1 Image           │  ← AI-generated, watermark auto-removed
-│                             │
-├─────────────────────────────┤
-│ ① Panel Title (yellow)      │  ← Dark text band (dynamic height)
-│ Story line 1...             │
-│ Story line 2...             │
-│ Punchline...                │
-├─────────────────────────────┤
-│                             │
-│     Panel 2 Image           │
-│                             │
-├─────────────────────────────┤
-│ ② Panel Title               │
-│ Story lines...              │
-└─────────────────────────────┘
-```
+- Auto watermark removal from AI-generated images
+- Dynamic text bands that expand based on content length
+- Hunzhi-style storytelling format (scene → conflict → punchline)
+- 1080px wide, mobile-friendly output
+- No image cropping — text lives on separate bands below each panel
 
 ## Installation
 
+### As an AI Agent Skill
+
+| Platform | Install |
+|----------|---------|
+| **QoderWork** | `cp -r . ~/.qoderwork/skills/comic-production` |
+| **Claude Code** (global) | `cp -r . ~/.claude/skills/comic-production` |
+| **Claude Code** (project) | `cp -r . .claude/skills/comic-production` |
+| **Cursor** | Copy `SKILL.md` to `.cursor/rules/comic-production.mdc` |
+
+### As a Standalone Python Tool
+
 ```bash
 pip install Pillow
+python3 scripts/assemble.py --help
 ```
 
-**Font requirements:** The script looks for CJK fonts in this order:
-1. `STHeiti Medium.ttc` / `STHeiti Light.ttc` (macOS default)
-2. `PingFang.ttc`
-3. `Songti.ttc`
-4. `Hiragino Sans GB.ttc`
+**Font requirements:** The script auto-detects CJK fonts on macOS (STHeiti, PingFang, Songti, Hiragino Sans). On Linux/Windows, install any CJK font and update `find_font()` in `assemble.py`.
 
-On Linux/Windows, install any CJK font and update the `find_font()` function.
+## Usage
 
-## Quick Start
+### With an AI Agent
 
-### 1. Prepare Panel Images
+After installing as a skill, the agent will automatically activate it when you ask to create educational comics. Try:
 
-Generate panel images using any AI image generator (DALL-E, Midjourney, Stable Diffusion, etc.) with this prompt template:
+```
+"帮我做一个关于量子力学的科普漫画"
+"Create an educational comic about blockchain"
+"用混知风格画一个讲股票K线的漫画"
+```
+
+### Standalone (Manual Pipeline)
+
+**Step 1:** Generate panel images with any AI image generator using this prompt template:
 
 ```
 A single-panel Chinese educational comic in the style of Hunzhi Comics.
 Scene: [YOUR SCENE DESCRIPTION].
-Character A's speech bubble: "中文对话A".
-Character B's speech bubble: "中文对话B".
+Character A's speech bubble: "中文对话".
 Simple cartoon style with bold black outlines, flat bright colors, minimal background.
 Exaggerated humorous facial expressions, big heads and small bodies.
-Chinese speech bubbles with dialogue are essential.
 ```
 
-**Recommended size:** 1024x768 (landscape, 4:3)
+Recommended size: 1024×768 (landscape, 4:3).
 
-### 2. Create panels.json
+**Step 2:** Create `panels.json`:
 
 ```json
 [
@@ -91,25 +109,11 @@ Chinese speech bubbles with dialogue are essential.
       "双方都得需要对方的东西，这买卖才能成",
       "需求必须双向匹配——太难了吧！"
     ]
-  },
-  {
-    "image": "panels/panel_2.png",
-    "title": "一般等价物",
-    "lines": [
-      "后来大家发现，盐谁都想要",
-      "于是盐变成了'万能货币'",
-      "这就是'一般等价物'的由来"
-    ]
   }
 ]
 ```
 
-Each panel uses:
-- `image`: Path to the generated panel image
-- `title`: 2-4 Chinese characters, concise stage/phase name
-- `lines`: Array of story text (recommended 3 lines: scene → conflict → punchline)
-
-### 3. Assemble the Comic
+**Step 3:** Assemble:
 
 ```bash
 python3 scripts/assemble.py \
@@ -120,28 +124,69 @@ python3 scripts/assemble.py \
   --output-jpg
 ```
 
-**Options:**
+### CLI Options
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--width` | 1080 | Output image width (px) |
+| `--width` | 1080 | Output width (px) |
 | `--padding` | 40 | Horizontal margin (px) |
-| `--text-band-h` | 95 | Minimum text band height (px) |
+| `--text-band-h` | 95 | Min text band height (px) |
 | `--title-h` | 180 | Title area height (px) |
 | `--gap` | 10 | Gap between elements (px) |
-| `--output-jpg` | flag | Also export JPG version |
+| `--output-jpg` | flag | Also export JPG |
 
-## Writing Guidelines (混知写作五原则)
+## How Skills Work
+
+A skill is a folder containing a `SKILL.md` file that instructs AI coding agents how to perform specific tasks:
+
+```
+comic-production/
+├── SKILL.md              # Agent instructions (YAML frontmatter + markdown)
+├── scripts/
+│   └── assemble.py       # PIL comic assembly script
+├── examples/             # Sample outputs
+├── README.md
+└── LICENSE
+```
+
+The `SKILL.md` frontmatter tells the agent when to activate the skill:
+
+```yaml
+---
+name: comic-production
+description: "Generate educational comic strips in 混知漫画 style...
+  Use when the user wants to create educational comics, 科普漫画,
+  knowledge comics, or illustrated explainers."
+---
+```
+
+## Project Structure
+
+```
+comic-production/
+├── SKILL.md                 # AI Agent skill definition
+├── scripts/
+│   └── assemble.py          # PIL-based comic assembly (249 lines)
+├── examples/
+│   ├── example_money.jpg    # 什么是货币
+│   ├── example_inflation.jpg# 什么是通胀
+│   └── example_kline.jpg    # 什么是K线
+├── README.md
+├── LICENSE                  # MIT
+└── .gitignore
+```
+
+## Storytelling Principles (混知写作五原则)
 
 The key to great educational comics is **storytelling**, not textbook definitions:
 
-1. **Use analogies and metaphors** — Don't quote textbook definitions
-2. **Tell it like a story to a friend** — Not like a lecture
+1. **Use analogies and metaphors** — never quote textbook definitions
+2. **Tell it like a story to a friend** — not like a lecture
 3. **Create mini-scenes** — "Imagine a village of 100 people, each given 100 yuan..."
 4. **Use humor, rhetorical questions, dramatic contrast**
-5. **Last line = golden quote/punchline** — Make it memorable
+5. **Last line = golden quote / punchline** — make it memorable
 
-### Good Example
+**Good:**
 
 ```json
 {
@@ -154,63 +199,61 @@ The key to great educational comics is **storytelling**, not textbook definition
 }
 ```
 
-### Bad Example (Avoid)
+**Bad (avoid):**
 
 ```json
-{
-  "title": "什么是通胀",
-  "description": "货币供应量超过商品供应量导致物价上涨"
-}
+{"title": "什么是通胀", "description": "货币供应量超过商品供应量导致物价上涨"}
 ```
 
-## Color Scheme
+## Design Spec
 
-| Element | Color | Hex |
-|---------|-------|-----|
-| Background | Light gray | `(245, 245, 245)` |
-| Text band | Dark navy | `(35, 40, 55)` |
-| Title text | Red | `(230, 60, 60)` |
-| Panel title | Yellow | `(250, 200, 30)` |
-| Description | Light gray | `(200, 200, 200)` |
-| Number badge | Yellow bg + dark text | — |
+### Layout
 
-## Programmatic Usage
-
-You can also use the assembly function in your own Python code:
-
-```python
-from scripts.assemble import assemble
-
-assemble(
-    panels_data=[
-        {"image": "panel_1.png", "title": "第一步", "lines": ["...", "...", "..."]},
-        {"image": "panel_2.png", "title": "第二步", "lines": ["...", "...", "..."]},
-    ],
-    title="我的科普漫画",
-    subtitle="一个有趣的故事",
-    output_path="my_comic.png",
-)
+```
+┌─────────────────────────────┐
+│        Title Area           │
+├─────────────────────────────┤
+│     Panel 1 Image           │  ← AI-generated, watermark auto-removed
+├─────────────────────────────┤
+│ ① Panel Title (yellow)      │  ← Dark text band (dynamic height)
+│ Story line 1...             │
+│ Story line 2...             │
+│ Punchline...                │
+├─────────────────────────────┤
+│     Panel 2 Image           │
+├─────────────────────────────┤
+│ ② Panel Title               │
+│ Story lines...              │
+└─────────────────────────────┘
 ```
 
-## Panel Count Guide
+### Color Palette
+
+| Element | Hex | Preview |
+|---------|-----|---------|
+| Background | `#F5F5F5` | 🟫 |
+| Text band | `#232837` | ⬛ |
+| Title text | `#E63C3C` | 🟥 |
+| Panel title | `#FAC81E` | 🟨 |
+| Body text | `#C8C8C8` | 🔘 |
+
+### Panel Count Guide
 
 | Topic Depth | Panels |
 |-------------|--------|
-| Simple topic | 6 |
-| Standard topic | 8 (recommended) |
+| Simple | 6 |
+| Standard | 8 (recommended) |
 | Deep dive | 10 |
 
-## Use with AI Agents
+## Contributing
 
-This tool was originally designed as a **Skill** for AI coding agents (Claude Code, QoderWork, etc.). The `SKILL.md` file contains the full agent instructions. You can install it as a skill in any compatible AI agent framework.
+Contributions are welcome! Feel free to:
 
-## Troubleshooting
-
-- **Panels look inconsistent in style:** Re-generate with more specific style keywords. Add "same art style as previous panels" to prompt.
-- **Text too long for band:** Keep lines under 40 Chinese characters each.
-- **CJK fonts not rendering:** Install a CJK font and update `find_font()` in `assemble.py`.
-- **Image too tall for sharing:** Use `--width 720` for WeChat-friendly output.
+- Add support for more CJK fonts (Linux/Windows)
+- Improve the watermark removal algorithm
+- Add new layout templates (horizontal, grid, etc.)
+- Translate the storytelling guide to other languages
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+[MIT](LICENSE) — free for personal and commercial use.

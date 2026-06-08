@@ -5,7 +5,9 @@ __pycache__/
 dist/
 build/
 .DS_Store
-*.png
-*.jpg
-*.jpeg
-!example_*.png
+
+# Ignore generated output images (but keep examples/)
+comic*.png
+comic*.jpg
+panels/
+output/
